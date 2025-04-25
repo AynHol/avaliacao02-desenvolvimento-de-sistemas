@@ -1,35 +1,75 @@
-import { useEffect } from 'react';
+"use client";
+import { TextField } from "@mui/material";
+import { FormEvent, useEffect, useState } from "react";
+import styles from "./styles.module.css";
+import Product from "@/components/product";
+import axios from "axios";
+import { v4 as uuid } from "uuid";
+
+type product = {
+  id: string;
+  text: string;
+  checked: boolean;
+};
 
 export default function MarketList() {
+  const [product, setProduct] = useState<product[]>([]);
+  const [text, setText] = useState<string>("");
+
   useEffect(() => {
     loadItens();
-  }, [])
+  }, []);
 
-
-  function loadItens() {
-    // BUSCA AS INFORMAÇÕES NA API FAKE
-    // SALVA O VALOR NO ESTADO
+  async function loadItens() {
+    const response = await axios.get("http://localhost:3001/itens");
+    setProduct(response.data);
   }
 
-  function handleAddItem() {
-    // CRIAR O OBJETO DO ITEM
-    // CHAMA A API PARA ADICIONAR O ITEM
-    // CARREGA OS PRODUTOS NOVAMENTE // loadItens();
+  async function handleAddItem(event: FormEvent) {
+    event.preventDefault();
+    const product = {
+      id: uuid(),
+      text: text,
+      checked: false,
+    };
+    await axios.post("http://localhost:3001/itens", product);
+    await loadItens();
+    setText("");
   }
 
-  function handleRemoveItem(id: string) {
-    // FILTRA O ESTADO E REMOVE O ITEM
-    // CHAMA A API PARA REMOVER O ITEM
-    // CARREGA OS PRODUTOS NOVAMENTE // loadItens();
+  async function handleRemoveItem(event: MouseEvent, id: string) {
+    event.preventDefault();
+    const productFilter = product.filter((product) => product.id !== id);
+    await axios.patch(`http://localhost:3001/itens/${id}`, {
+      product: productFilter,
+    });
+    await loadItens();
   }
 
-  function handleUpdateItem(id: string) {
-    // CRIA O OBJETO DO ITEM
-    // CHAMA A API PARA ATUALIZAR O ITEM
-    // CARREGA OS PRODUTOS NOVAMENTE // loadItens();
+  async function handleUpdateItem(event: MouseEvent, id: string, boolean: boolean) {
+    event.preventDefault();
+    await axios.patch(`http://localhost:3001/itens/${id}`, {
+      checked: boolean,
+    });
+    await loadItens();
   }
 
   return (
-    <h1>MarketList</h1>
+    <div className={styles.container}>
+      <h1>Lista de Compras</h1>
+      <div className={styles.add}>
+        <TextField
+          label="Item"
+          variant="outlined"
+          color="info"
+          value={text}
+          onChange={(event) => setText(event.target.value)}
+        />
+        <button onClick={handleAddItem}>+</button>
+      </div>
+      {product.map((item) => (
+        <Product product={item} key={item.id} handleRemoveItem={handleRemoveItem} handleUpdateItem={handleUpdateItem} />
+      ))}
+    </div>
   );
 }

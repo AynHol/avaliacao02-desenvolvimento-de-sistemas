@@ -24,6 +24,11 @@
       "id": "e35d8b6f-d73b-4fba-88d0-b51b387cbd9d",
       "text": "Alface",
       "checked": false
+    },
+    {
+      "id": "639ff1f1-8d99-4d11-be5d-4249cd732fb0",
+      "text": "Batata",
+      "checked": false
     }
   ]
 }
