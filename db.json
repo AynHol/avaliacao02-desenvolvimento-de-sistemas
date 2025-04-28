@@ -29,6 +29,11 @@
       "id": "639ff1f1-8d99-4d11-be5d-4249cd732fb0",
       "text": "Batata",
       "checked": false
+    },
+    {
+      "id": "f76ada85-7163-4f3a-85cf-276d49ce53c2",
+      "text": "Banana",
+      "checked": false
     }
   ]
 }

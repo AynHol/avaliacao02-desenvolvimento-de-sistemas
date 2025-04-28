@@ -39,9 +39,9 @@ export default function MarketList() {
 
   async function handleRemoveItem(event: MouseEvent, id: string) {
     event.preventDefault();
-    const productFilter = product.filter((product) => product.id !== id);
+    const productMap = product.map((product) => product.id !== id);
     await axios.patch(`http://localhost:3001/itens/${id}`, {
-      product: productFilter,
+      product: productMap,
     });
     await loadItens();
   }
@@ -68,7 +68,7 @@ export default function MarketList() {
         <button onClick={handleAddItem}>+</button>
       </div>
       {product.map((item) => (
-        <Product product={item} key={item.id} handleRemoveItem={handleRemoveItem} handleUpdateItem={handleUpdateItem} />
+        <Product product={item} key={item.id} id={item.id} handleRemoveItem={handleRemoveItem} handleUpdateItem={handleUpdateItem} />
       ))}
     </div>
   );
