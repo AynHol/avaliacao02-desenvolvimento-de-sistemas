@@ -1,6 +1,6 @@
 {
-  "name": "semana13_frontend",
-  "version": "0.1.1",
+  "name": "semana06",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
